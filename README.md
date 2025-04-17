@@ -2,56 +2,48 @@
 
 **Personalized Learning Recommendations**
 
-SkillRaiser is a full-stack web application that recommends training courses to users based on their current skill set and interests. It combines both NoSQL (MongoDB) and SQL (MySQL) databases to store and manage user and training data.
-
----
+SkillRaiser is a full-stack web application that provides training course recommendations based on users’ existing skills and new interests. It leverages both MongoDB and MySQL databases to manage user profiles, skills, and training metadata.
 
 ## Table of Contents
 
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Prerequisites](#prerequisites)
-- [Database Setup](#database-setup)
-- [Environment Variables](#environment-variables)
-- [Installation](#installation)
-- [Development & Running](#development--running)
-- [Project Structure](#project-structure)
-- [Contributing](#contributing)
-- [License](#license)
+1. [Features](#features)
+2. [Tech Stack](#tech-stack)
+3. [Prerequisites](#prerequisites)
+4. [Database Setup](#database-setup)
+5. [Environment Variables](#environment-variables)
+6. [Installation](#installation)
+7. [Development & Running](#development--running)
+8. [Project Structure](#project-structure)
+9. [Contributing](#contributing)
+10. [License](#license)
 
 ---
 
 ## Features
 
-- 🔹 User authentication and personalized greeting
-- 🔹 Dynamic fetching and display of user skills
-- 🔹 Intelligent course recommendations based on skills and interests
-- 🔹 Live search and filtering of training programs
-- 🔹 Add new interests to get tailored suggestions
-- 🔹 Sort courses by duration, creation date, or popularity
-- 🔹 Responsive UI designed with Tailwind CSS
-- 🔹 Gradient overlay background for enhanced visuals
-
----
+- 🔹 **User Authentication & Personalized Greeting**: Users sign in by name and receive a custom welcome message.
+- 🔹 **Skill Profile Management**: Fetch and display users’ existing skills from MongoDB.
+- 🔹 **Intelligent Course Recommendations**: Recommend trainings by matching user skills and newly entered interests.
+- 🔹 **Live Search & Filtering**: Search for additional courses by skill; filter and sort results.
+- 🔹 **Add New Interests**: Dynamically query for new training programs by entering new skills.
+- 🔹 **Sort Options**: Sort by duration, creation date, or popularity.
+- 🔹 **Responsive UI**: Built with Tailwind CSS; gradient overlays for enhanced visuals.
 
 ## Tech Stack
 
-- **Frontend:** React.js, Tailwind CSS, Vite
-- **Backend:** Node.js, Express.js
-- **Databases:**
-  - MongoDB (user profiles, training metadata)
-  - MySQL (relational queries via `training_platform.sql` schema)
-- **Linting & Formatting:** ESLint
-
----
+- **Frontend**: React.js, Vite, Tailwind CSS  
+- **Backend**: Node.js, Express.js  
+- **Databases**:
+  - MongoDB (user profiles & skill data)  
+  - MySQL (training schema & relational queries via `training_platform.sql`)  
+- **Linting & Formatting**: ESLint, Prettier
 
 ## Prerequisites
 
 - **Node.js** v18 or higher
 - **npm** v8 or higher
-- **MySQL** 8.0+ (or compatible MariaDB)
-
----
+- **MySQL** 8.0+ or MariaDB-compatible
+- **MongoDB** 4.4+
 
 ## Database Setup
 
@@ -60,27 +52,32 @@ SkillRaiser is a full-stack web application that recommends training courses to 
    git clone https://github.com/Amaansayed333/skillraiser-app.git
    cd skillraiser-app
    ```
-2. **Create and import the SQL schema**
+
+2. **MySQL Schema**
    ```sql
    -- In MySQL shell or client:
    CREATE DATABASE training_platform;
    USE training_platform;
    SOURCE training_platform.sql;
-   ```
-3. **Verify tables and sample data**
-   ```sql
+
+   -- Verify tables:
    SHOW TABLES;
    SELECT * FROM Users LIMIT 5;
    ```
 
----
+3. **MongoDB Database**
+   ```bash
+   # Start MongoDB locally or use Atlas
+   mongo --eval "use skillraiser"
+   # (Optionally import seed data if provided)
+   ```
 
 ## Environment Variables
 
-Create a `.env` file in the project root and add the following (adjust values as needed):
+Create a `.env` file in the project root:
 
-```
-# MongoDB connection string
+```dotenv
+# MongoDB connection
 MONGO_URI=mongodb://localhost:27017/skillraiser
 
 # MySQL configuration
@@ -89,76 +86,78 @@ DB_USER=root
 DB_PASSWORD=your_password
 DB_NAME=training_platform
 
-# App configuration
+# Server port
 PORT=3000
 ```
 
----
-
 ## Installation
 
-Install dependencies for both frontend and backend:
+Install dependencies for both backend and frontend:
 
 ```bash
-npm install        # Installs server-side dependencies
-npm run client:install  # Installs React client dependencies
+npm install            # Backend dependencies
+npm run client:install # Frontend dependencies
 ```
-
----
 
 ## Development & Running
 
-- **Start both server and client in development mode**
-  ```bash
-  npm run dev
-  ```
-  This will:
-  - Launch the Express server on `http://localhost:3000`
-  - Launch the React dev server on `http://localhost:5173`
+Start both server and client in development mode:
 
-- **Production build**
-  ```bash
-  npm run build
-  npm start
-  ```
+```bash
+npm run dev
+```
 
----
+- **Express server** runs at `http://localhost:3000`  
+- **React dev server** runs at `http://localhost:5173`
+
+**Production Build**:
+
+```bash
+npm run build   # Builds the React frontend
+npm start       # Starts the Express server with the built frontend
+```
 
 ## Project Structure
 
 ```
 skillraiser-app/
-├── training_platform.sql    # SQL schema & seed data
-├── package.json             # Scripts & dependencies
-├── vite.config.js           # Vite configuration
-├── eslint.config.js         # Lint rules
-├── index.html               # Root HTML template
+├── training_platform.sql       # MySQL schema & seed data
+├── package.json                # Scripts & dependencies
+├── vite.config.js              # Vite configuration
+├── .eslintrc.js                # ESLint rules
+├── .gitignore
+├── index.html                  # Frontend entry HTML
 ├── src/
-│   ├── client/              # React frontend
-│   │   ├── components/
-│   │   └── App.jsx
-│   └── server/              # Express backend
-│       ├── controllers/
-│       ├── models/          # Mongoose & SQL models
-│       └── routes/
-└── .gitignore
+│   ├── client/                 # React frontend
+│   │   ├── components/         # Reusable UI components
+│   │   ├── assets/             # Images & styles
+│   │   ├── App.jsx             # Main React component
+│   │   └── main.jsx            # React entry point
+│   └── server/                 # Express backend
+│       ├── controllers/        # Route handlers
+│       ├── models/             # Mongoose & SQL models
+│       ├── routes/             # API route definitions
+│       ├── db.js               # Database connection setup
+│       └── index.js            # Server entry point
+└── public/                     # Static assets
 ```
-
----
 
 ## Contributing
 
-Contributions are welcome! Please follow these steps:
+Contributions are welcome! Please:
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/my-feature`)
-3. Commit your changes (`git commit -m 'Add my feature'`)
-4. Push to the branch (`git push origin feature/my-feature`)
+1. Fork the repository  
+2. Create a feature branch: `git checkout -b feature/my-feature`  
+3. Commit changes: `git commit -m "Add my feature"`  
+4. Push branch: `git push origin feature/my-feature`  
 5. Open a Pull Request
 
----
+Ensure lint checks pass:
+```bash
+npm run lint
+```
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
 
