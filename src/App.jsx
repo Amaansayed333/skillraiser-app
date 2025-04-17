@@ -1,16 +1,16 @@
 import { useState } from "react";
 import UserForm from "./components/Userform.jsx";
-
-import SearchBar2 from "./components/Searchbar2.jsx"
+import SearchBar2 from "./components/Searchbar2.jsx";
 import TrainingGrid from "./components/Traininggrid.jsx";
 import Sortoptions from "./components/Sortdropdown.jsx";
 
 function App() {
   const [userName, setUserName] = useState("");
   const [userData, setUserData] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [noTrainingsMessage, setNoTrainingsMessage] = useState("");
   const [trainings, setTrainings] = useState([]);
   const [filteredTrainings, setFilteredTrainings] = useState([]);
+  const [searchPerformed, setSearchPerformed] = useState(false);
 
   // Fetch user data and their skills from backend
   const handleUserSubmit = async (name) => {
@@ -54,7 +54,8 @@ function App() {
         setTrainings(trainingsWithProgress);
         setFilteredTrainings(trainingsWithProgress);
       } else {
-        alert("No training courses found.");
+        setTrainings([]);
+        setFilteredTrainings([]);
       }
     } catch (err) {
       console.error("Error fetching training courses:", err);
@@ -86,24 +87,37 @@ function App() {
             <h1 className="text-3xl font-bold text-gray-800">
               👋 Welcome {userData.name} to SkillRaiser
             </h1>
-                <p className="text-2xl font-bold text-gray-600 mt-2">
-                  Your skills:
-                  <span className="font-medium text-blue-600 text-lg font-semibold">
-                    {" "}
-                      {userData.skills.join(", ")}
-                  </span>
-                </p>
+            <p className="text-2xl font-bold text-gray-600 mt-2">
+              Your skills:
+              <span className="font-medium text-blue-600 text-lg font-semibold">
+                {" "}
+                {userData.skills.join(", ")}
+              </span>
+            </p>
           </div>
 
           {/* 3. Search Bar */}
           <div>
             <h2 className="text-xl font-semibold text-gray-800 mb-2">
               🔍 Explore More Trainings by Interest
-              <SearchBar2 onSkillSearch={(results) => setFilteredTrainings(results)} />
+              <SearchBar2 onSkillSearch={(results) => {
+                setFilteredTrainings(results);
+                setSearchPerformed(true);
+                if (results.length === 0) {
+                  setNoTrainingsMessage("❌ No trainings available for this skill.");
+                } else {
+                  setNoTrainingsMessage("");
+                }
+              }}/>
             </h2>
-            <Sortoptions onSortChange={handleSortChange}/>
+            <Sortoptions onSortChange={handleSortChange} />
             
-            
+            {/* Show No Trainings message */}
+            {searchPerformed && noTrainingsMessage && (
+              <p className="text-red-500 font-medium mt-2">
+                {noTrainingsMessage}
+              </p>
+            )}
           </div>
 
           {/* 2. Trainings based on existing skills */}

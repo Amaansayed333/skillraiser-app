@@ -5,7 +5,7 @@ const TrainingCard = ({ training, onResume, onDismiss }) => {
 
   const handleStart = () => {
     setIsStarted(true); // Mark training as started
-    onResume(training.id); // Trigger the resume action or any logic you want
+    onResume(training.training_id); // Trigger the resume action or any logic you want
   };
 
   return (
@@ -24,10 +24,17 @@ const TrainingCard = ({ training, onResume, onDismiss }) => {
               style={{ width: `${training.progress}%` }}
             ></div>
           </div>
-          <p className="text-sm mb-3">{training.progress}% completed</p>
+
+          <p className="text-sm mb-1">{training.progress}% completed</p>
+
+          {training.description && (
+            <p className="text-sm text-gray-700 italic">
+              {training.description}
+            </p>
+          )}
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex gap-2 mt-3">
           {/* Conditionally render "Start" or "Resume" button */}
           {!isStarted ? (
             <button
@@ -38,7 +45,7 @@ const TrainingCard = ({ training, onResume, onDismiss }) => {
             </button>
           ) : (
             <button
-              onClick={() => onResume(training.id)}
+              onClick={() => onResume(training.training_id)}
               className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 text-sm"
             >
               Resume
@@ -46,7 +53,7 @@ const TrainingCard = ({ training, onResume, onDismiss }) => {
           )}
 
           <button
-            onClick={() => onDismiss(training.id)}
+            onClick={() => onDismiss(training.training_id)}
             className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm"
           >
             Not Interested
