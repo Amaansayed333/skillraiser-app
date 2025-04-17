@@ -1,6 +1,6 @@
 import { useState } from "react";
 import UserForm from "./components/Userform.jsx";
-import SearchBar from "./components/Searchbar.jsx";
+
 import SearchBar2 from "./components/Searchbar2.jsx"
 import TrainingGrid from "./components/Traininggrid.jsx";
 import Sortoptions from "./components/Sortdropdown.jsx";
